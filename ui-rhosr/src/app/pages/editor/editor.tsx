@@ -21,12 +21,14 @@ import {PageComponent, PageProps, PageState} from "../basePage";
 import {PageSection, PageSectionVariants} from "@patternfly/react-core";
 import {OpenApiEditor} from "./components/openapi-editor";
 import {GraphQLSchemaEditor} from "./components/graphql-editor";
+import {BasicEditor} from "./components/basic-editor";
 import {Services} from "../../../services";
 import {ArtifactMetaData} from "../../../models/artifactMetaData.model";
 import {EditorToolbar} from "./components/editor-toolbar";
 import {If, PleaseWaitModal} from "../../components";
 import {SaveModal} from "./components/save-modal";
 import {RegistryInstance} from "../../../models";
+import { BaseEditor } from "./components/base-editor";
 
 interface RegistryCoordinates {
     registryId: string;
@@ -89,12 +91,7 @@ export class EditorPage extends PageComponent<EditorPageProps, EditorPageState> 
                                            saveButtonLabel="Save changes"
                                            revertButtonLabel="Revert changes" />
                         </If>
-                        <If condition={ this.state.artifactMetaData?.type == "OPENAPI"}>
-                            <OpenApiEditor className="editor-flex-editor" content={ this.state.content as string } onChange={ this.onEditorChange } />
-                        </If>
-                        <If condition={ this.state.artifactMetaData?.type == "GRAPHQL" }>
-                            <GraphQLSchemaEditor content={this.state.content as string} onChange={this.onEditorChange}></GraphQLSchemaEditor>
-                        </If>
+                        <BaseEditor onChange={this.onEditorChange} content={this.state.content} artifactType={this.state.artifactMetaData?.type}/>
                     </div>
                 </PageSection>
                 <SaveModal onSave={ this.doSave } onClose={ this.cancelSave } isOpen={ this.state.isSaveModalOpen } />
